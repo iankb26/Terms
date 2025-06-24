@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration-Terms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 40px 0 60px 0;
+            background: linear-gradient(45deg, #4CAF50, #45a049, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .quiz-button {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            border: none;
+            color: white;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+            min-width: 250px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quiz-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+            background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+        }
+
+        .quiz-button:active {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+                margin: 20px 0 40px 0;
+            }
+
+            .quiz-button {
+                font-size: 1.2rem;
+                padding: 15px 30px;
+                min-width: 200px;
+            }
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #666 0%, #555 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #777 0%, #666 100%);
+            transform: translateY(-2px);
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            color: #4CAF50;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .quiz-content {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #666;
+            color: white;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .choice-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #4CAF50;
+        }
+
+        .choice-button.correct {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .choice-button.incorrect {
+            background: #f44336;
+            border-color: #f44336;
+            color: white;
+        }
+
+        .choice-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .quiz-progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #4CAF50;
+        }
+
+        .quiz-score {
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 10px;
+            border: 2px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Course Integration Terms</h1>
+
+        <!-- Main Category Selection -->
+        <div id="main-menu" class="button-container">
+            <button class="quiz-button" onclick="showMESLParts()">
+                MESL
+            </button>
+
+            <button class="quiz-button" onclick="startQuiz('Machine Design')">
+                Machine Design
+            </button>
+
+            <button class="quiz-button" onclick="startQuiz('PIPE')">
+                PIPE
+            </button>
+        </div>
+
+        <!-- MESL Parts Selection -->
+        <div id="mesl-parts" class="button-container" style="display: none;">
+            <button class="back-button" onclick="showMainMenu()">← Back to Main Menu</button>
+            <h2 class="subtitle">MESL Parts</h2>
+            <button class="quiz-button" onclick="startMESLPart(1)">MESL PART 1</button>
+            <button class="quiz-button" onclick="startMESLPart(2)">MESL PART 2</button>
+            <button class="quiz-button" onclick="startMESLPart(3)">MESL PART 3</button>
+            <button class="quiz-button" onclick="startMESLPart(4)">MESL PART 4</button>
+            <button class="quiz-button" onclick="startMESLPart(5)">MESL PART 5</button>
+            <button class="quiz-button" onclick="startMESLPart(6)">MESL PART 6</button>
+            <button class="quiz-button" onclick="startMESLPart(7)">MESL PART 7</button>
+            <button class="quiz-button" onclick="startMESLPart(8)">MESL PART 8</button>
+            <button class="quiz-button" onclick="startMESLPart(9)">MESL PART 9</button>
+            <button class="quiz-button" onclick="startMESLPart(10)">MESL PART 10</button>
+            <button class="quiz-button" onclick="startMESLPart(11)">MESL PART 11</button>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" style="display: none;">
+            <button class="back-button" onclick="showMESLParts()">← Back to MESL Parts</button>
+            <div id="quiz-content"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <span id="footer-text">Select a category to start your quiz</span>
+    </div>
+
+    <script>
+        // Navigation functions
+        function showMainMenu() {
+            document.getElementById('main-menu').style.display = 'flex';
+            document.getElementById('mesl-parts').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('footer-text').textContent = 'Select a category to start your quiz';
+        }
+
+        function showMESLParts() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('mesl-parts').style.display = 'flex';
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('footer-text').textContent = 'Select a MESL part to start your quiz';
+        }
+
+        function startQuiz(category) {
+            alert(`Starting ${category} quiz! \n\nThis functionality will be added later.`);
+        }
+
+        // MESL Part 1 Questions Data
+        const meslPart1Questions = [
+            {
+                question: "For a given function, it is found that f(t) = f(-t). What type of symmetry does f(t) have?",
+                choices: ["A. Odd symmetry", "B. Even symmetry", "C. Rotational symmetry", "D. Quarter-wave symmetry"],
+                correct: 1  // Correct: Even symmetry (f(t) = f(-t) is definition of even function)
+            },
+            {
+                question: "Which number has four significant figures?",
+                choices: ["A. 0.01414", "B. 0.0014", "C. 0.141", "D. 1.4140"],
+                correct: 0  // Corrected: 0.01414 has 4 sig figs (1,4,1,4). Leading zeros don't count.
+            },
+            {
+                question: "Naperian logarithm have a base closest to which number?",
+                choices: ["A. 2.17", "B. 2.72", "C. 3.14", "D. 10"],
+                correct: 1  // Correct: Natural log base e ≈ 2.718 ≈ 2.72
+            },
+            {
+                question: "If the second derivative of the equation of a curve is equal to the negative of the equation of the curve, then the curve is",
+                choices: ["A. An exponential", "B. A sinusoid", "C. A tangent", "D. A parabola"],
+                correct: 1  // Correct: f''(x) = -f(x) describes sinusoidal functions
+            },
+            {
+                question: "To find the angle of a triangle, given only the lengths of the sides, one would use",
+                choices: ["A. The law of sines", "B. The law of cosines", "C. The law of tangents", "D. The inverse square law"],
+                correct: 1  // Correct: Law of cosines is used when all three sides are known
+            },
+            {
+                question: "Which is true regarding the signs of the natural functions for angles between 90° and 180°?",
+                choices: ["A. The tangent is positive", "B. The cotangent is positive", "C. The cosine is negative", "D. The sine is negative"],
+                correct: 2  // Correct: In quadrant II, cosine is negative, sine is positive
+            },
+            {
+                question: "What is the inverse natural function of the cosecant?",
+                choices: ["A. Secant", "B. Sine", "C. Cosine", "D. Cotangent"],
+                correct: 1  // Correct: csc(x) = 1/sin(x), so inverse is sine
+            },
+            {
+                question: "The graphical presentation of a cumulative frequency distribution in a set of statistical data is called ____",
+                choices: ["A. Histogram", "B. Vertical", "C. Logicurve", "D. Ogive"],
+                correct: 3  // Correct: Ogive is cumulative frequency curve
+            },
+            {
+                question: "A statement of truth of which follows with little or no proof from a theorem.",
+                choices: ["A. Axiom", "B. Hypothesis", "C. Corollary", "D. Conclusion"],
+                correct: 2  // Correct: Corollary follows easily from a theorem
+            },
+            {
+                question: "If is a sequence of numbers such that the successive terms differ by a constant, then it is called",
+                choices: ["A. Arithmetic progression", "B. Infinite progression", "C. Geometric progression", "D. Harmonic progression"],
+                correct: 0  // Correct: Arithmetic progression has constant difference
+            },
+            {
+                question: "An algebraic expression consisting of one term.",
+                choices: ["A. Polynomial", "B. Binomial", "C. Linear", "D. Monomial"],
+                correct: 3  // Correct: Monomial = one term
+            },
+            {
+                question: "In algebra, this consists of products and quotients of ordinary numbers and letters which represent numbers.",
+                choices: ["A. Expression", "B. Term", "C. Equation", "D. Coefficient"],
+                correct: 1  // Correct: A term is a product/quotient of numbers and variables
+            },
+            {
+                question: "An expression of two terms is called",
+                choices: ["A. Polynomial", "B. Binomial", "C. Binomial", "D. All of the above"],
+                correct: 1  // Correct: Binomial = two terms
+            },
+            {
+                question: "The degree of a polynomial or equation is the",
+                choices: ["A. Maximum exponent", "B. Maximum sum of exponents", "C. Exponent of the first variable", "D. Maximum exponent of x"],
+                correct: 1  // Corrected: For multivariable, it's the highest sum of exponents in any term
+            },
+            {
+                question: "What is the degree of the polynomial 3x⁴y + 2x³ + 2x² - 4y + 2?",
+                choices: ["A. 7", "B. 5", "C. 4", "D. 3"],
+                correct: 1  // Corrected: 3x⁴y has degree 4+1=5 (sum of exponents in highest degree term)
+            },
+            {
+                question: "Any fraction which contains one or more fractions in either numerator or denominator, or both is called",
+                choices: ["A. Complex fraction", "B. Composite fraction", "C. Simple fraction", "D. All of the above"],
+                correct: 0  // Correct: Complex fraction
+            },
+            {
+                question: "A common fraction with unity for numerator and a positive integer as denominator (i.e. 1/n).",
+                choices: ["A. Ordinary fraction", "B. Unit fraction", "C. Common fraction", "D. Improper fraction"],
+                correct: 1  // Correct: Unit fraction
+            },
+            {
+                question: "If the absolute value of the numerator of a fraction is smaller than the denominator, it is called",
+                choices: ["A. Proper fraction", "B. Improper fraction", "C. Decimal fraction", "D. Mixed number"],
+                correct: 0  // Correct: Proper fraction
+            },
+            {
+                question: "A number that consists of an integer part (which may be zero) and a decimal part less than unity that follows the decimal marker, which may be a point or a comma.",
+                choices: ["A. Proper fraction", "B. Improper fraction", "C. Decimal fraction", "D. Mixed number"],
+                correct: 2  // Correct: Decimal fraction
+            },
+            {
+                question: "Considered as the 'counting numbers'",
+                choices: ["A. Integers", "B. Rational numbers", "C. Irrational numbers", "D. Natural numbers"],
+                correct: 3  // Correct: Natural numbers {1,2,3,...}
+            },
+            {
+                question: "In mathematical and other fields of logical reasoning, axioms are used as a basis for the formulation of statements called",
+                choices: ["A. Lemma", "B. Hypothesis", "C. Postulate", "D. Theorem"],
+                correct: 3  // Correct: Theorems are proven from axioms
+            },
+            {
+                question: "\"The product of two or more number is the same in whatever order they are multiplied.\" This refers to",
+                choices: ["A. Associative law", "B. Commutative law of multiplication", "C. Distributive law", "D. Distributive law of multiplication"],
+                correct: 1  // Correct: Commutative law (a×b = b×a)
+            },
+            {
+                question: "If a = b, then b can replace a in any equation. This illustrates what law of identity?",
+                choices: ["A. Reflexive law", "B. Law of symmetry", "C. Transitive law", "D. Substitution law"],
+                correct: 3  // Correct: Substitution law
+            },
+            {
+                question: "If a = b, and b = c, then a = c. This illustrates",
+                choices: ["A. Reflexive law", "B. Law of symmetry", "C. Transitive law", "D. Substitution law"],
+                correct: 2  // Correct: Transitive law
+            },
+            {
+                question: "The axiom which relates addition and multiplication is the _____ law.",
+                choices: ["A. Associative", "B. Distributive", "C. None of the above", "D. All of the above"],
+                correct: 1  // Correct: Distributive law a(b+c) = ab+ac
+            },
+            {
+                question: "Any combination of symbols and numbers related by the fundamental operation of algebra is called a/n",
+                choices: ["A. Equation", "B. Algebraic expression", "C. Term", "D. Algebraic sum"],
+                correct: 1  // Correct: Algebraic expression
+            },
+            {
+                question: "The algebraic expression consisting a sum of any number of terms is called a",
+                choices: ["A. Multinomial", "B. Summation", "C. Binomial", "D. Monomial"],
+                correct: 0  // Correct: Multinomial (or polynomial)
+            },
+            {
+                question: "An equation which is satisfied by all values of the variable for which the members of the equation are defined is known as",
+                choices: ["A. Linear equation", "B. Rational equation", "C. Conditional equation", "D. Irrational equation"],
+                correct: 2  // Corrected: This describes an identity, but closest is conditional equation
+            },
+            {
+                question: "An equation in which all of the known quantities are represented by letters is called",
+                choices: ["A. General equation", "B. Literal equation", "C. Linear equation", "D. Defective equation"],
+                correct: 1
+            },
+            {
+                question: "An array of m x n quantities which represent a single number system composed of elements in rows and columns is known as",
+                choices: ["A. Transposed matrix", "B. Composed of a matrix", "C. Matrix", "D. Determinant"],
+                correct: 2
+            },
+            {
+                question: "Binary number system is a system of notation for real number that uses the place-value method with __ as a base. What is another name of the binary number system?",
+                choices: ["A. Binary digits", "B. Enumerable system", "C. Dyadic number system", "D. Bits"],
+                correct: 2  // Correct: Dyadic number system (base 2)
+            },
+            {
+                question: "The number 0.123123123... is a/an",
+                choices: ["A. Irrational number", "B. Surd", "C. Rational number", "D. Transcendental"],
+                correct: 2  // Correct: Rational number (repeating decimal)
+            },
+            {
+                question: "MCMXCIV is the Roman numeral equivalent to",
+                choices: ["A. 1974", "B. 1944", "C. 1994", "D. 2994"],
+                correct: 2  // Correct: M(1000)+CM(900)+XC(90)+IV(4) = 1994
+            },
+            {
+                question: "A sequence of numbers where the succeeding term is greater than the preceding term is called",
+                choices: ["A. Dissonant series", "B. Convergent series", "C. Divergent series", "D. Isometric series"],
+                correct: 2  // Correct: Divergent series
+            },
+            {
+                question: "Terms that differs only in numeric coefficients are known as",
+                choices: ["A. Unlike terms", "B. Unequal terms", "C. Like terms", "D. Similar terms"],
+                correct: 2  // Correct: Like terms (same variables and exponents)
+            },
+            {
+                question: "In complex algebra, we use diagram to represent complex plane commonly called",
+                choices: ["A. Argand diagram", "B. Venn diagram", "C. Maxwell diagram", "D. Cartesian diagram"],
+                correct: 0  // Correct: Argand diagram
+            },
+            {
+                question: "7 + 0i is",
+                choices: ["A. An irrational number", "B. Real number", "C. Imaginary number", "D. A variable"],
+                correct: 1
+            },
+            {
+                question: "The number of successful outcomes divided by the number of possible outcomes is called",
+                choices: ["A. Odd", "B. Combination", "C. Permutation", "D. Probability"],
+                correct: 3
+            },
+            {
+                question: "If a two digit number has x for its unit digit and y for its tens digit, the number is represented as",
+                choices: ["A. x + y", "B. xy", "C. 10y + x", "D. 10x - y"],
+                correct: 2  // Correct: tens digit × 10 + units digit = 10y + x
+            },
+            {
+                question: "A frequency curve which is composed of series of rectangles constructed with the class as the base and frequency as the height is called",
+                choices: ["A. Histogram", "B. Frequency distribution", "C. Bar graph", "D. Pie chart"],
+                correct: 0  // Correct: Histogram
+            },
+            {
+                question: "If the roots of an equation are zero, then they are classified as",
+                choices: ["A. Hyperbolic solution", "B. Zeros of a function", "C. Extraneous roots", "D. Trivial solution"],
+                correct: 3  // Correct: Trivial solution (when roots = 0)
+            },
+            {
+                question: "Convergent series is a sequence of decreasing number or when the succeeding term is _____ the preceding term.",
+                choices: ["A. Greater than", "B. Equal to", "C. Less than", "D. None of the above"],
+                correct: 2  // Correct: Less than (decreasing sequence)
+            },
+            {
+                question: "If a = b then b = a. This illustrates what axiom in algebra?",
+                choices: ["A. Reflexive axiom", "B. Transitive axiom", "C. Replacement axiom", "D. Symmetric axiom"],
+                correct: 3  // Correct: Symmetric axiom
+            },
+            {
+                question: "A and B are independent events, the probability that event A will occur is Pa and the probability that A and B will occur is Pab. From these two statements, what is the probability that B will occur?",
+                choices: ["A. Pa = Pab", "B. Pa - Pab", "C. Pa + Pab", "D. Pab / Pa"],
+                correct: 3  // Correct: For independent events P(A∩B) = P(A)×P(B), so P(B) = P(A∩B)/P(A)
+            },
+            {
+                question: "Two or more equations are equal if and only if they have the same",
+                choices: ["A. Degree", "B. Order", "C. Variable set", "D. Solution set"],
+                correct: 3  // Correct: Same solution set
+            },
+            {
+                question: "In any square matrix, when the elements of any two rows are exactly the same, the determinant is",
+                choices: ["A. Zero", "B. Positive integer", "C. Negative integer", "D. Unity"],
+                correct: 0  // Correct: Zero
+            },
+            {
+                question: "The ratio or product of two expressions in direct or inverse relation with each other is called",
+                choices: ["A. Ratio and proportion", "B. Means", "C. Extremes", "D. Constant of variation"],
+                correct: 3  // Correct: Constant of variation
+            },
+            {
+                question: "Is a sequence of terms whose reciprocals from an arithmetic progression?",
+                choices: ["A. Geometric progression", "B. Harmonic progression", "C. Algebraic progression", "D. Ratio and proportion"],
+                correct: 1  // Correct: Harmonic progression
+            },
+            // ADDITIONAL QUESTIONS FROM THE IMAGES
+            {
+                question: "A statement of truth which is admitted without proof",
+                choices: ["A. Axiom", "B. Theorem", "C. Postulate", "D. Corollary"],
+                correct: 0  // Correct: Axiom
+            },
+            {
+                question: "The part of theorem which is assumed to be true.",
+                choices: ["A. Corollary", "B. Hypothesis", "C. Postulate", "D. Conclusion"],
+                correct: 1  // Correct: Hypothesis
+            },
+            {
+                question: "A statement of truth which follows with little or no proof from the theorem.",
+                choices: ["A. Corollary", "B. Axiom", "C. Postulate", "D. Conclusion"],
+                correct: 0  // Correct: Corollary
+            },
+            {
+                question: "Refers to the construction of drawing of lines and figures the possibility of which is admitted without proof.",
+                choices: ["A. Corollary", "B. Theorem", "C. Postulate", "D. Hypothesis"],
+                correct: 2  // Correct: Postulate
+            },
+            {
+                question: "A mathematical statement which has neither been proved nor denied by counterexamples",
+                choices: ["A. Fallacy", "B. Conjecture", "C. Theorem", "D. Paradox"],
+                correct: 1  // Correct: Conjecture
+            },
+            {
+                question: "A proved proposition which is useful mainly as a preliminary to the proof of a theorem.",
+                choices: ["A. Lemma", "B. Hypothesis", "C. Postulate", "D. Corollary"],
+                correct: 0  // Correct: Lemma
+            },
+            {
+                question: "Axioms are propositions of a general logical nature (about equal or unequal) while _______ are propositions concerning objects and constructions.",
+                choices: ["A. Theorems", "B. Corollaries", "C. Conclusions", "D. Postulates"],
+                correct: 3  // Correct: Postulates
+            },
+            {
+                question: "A ______ is an ancillary theorem whose result is not target for the proof.",
+                choices: ["A. Postulate", "B. Lemma", "C. Hypothesis", "D. Conclusion"],
+                correct: 1  // Correct: Lemma
+            },
+            {
+                question: "Statements that are accepted without discussion or proof are called axioms. The word \"axiom\" comes from the Greek \"axioma\" which means",
+                choices: ["A. Worth", "B. Correct", "C. True", "D. Perfect"],
+                correct: 0  // Correct: Worth
+            }
+        ];
+
+        function startMESLPart(partNumber) {
+            if (partNumber === 1) {
+                startMESLPart1Quiz();
+            } else {
+                alert(`MESL Part ${partNumber} quiz will be added later.`);
+            }
+        }
+
+        function startMESLPart1Quiz() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('mesl-parts').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('footer-text').textContent = 'MESL Part 1 Quiz in progress...';
+
+            displayQuiz(meslPart1Questions, 'MESL Part 1');
+        }
+
+        function displayQuiz(questions, title) {
+            const quizContent = document.getElementById('quiz-content');
+
+            // Add error checking
+            if (!quizContent) {
+                console.error('Quiz content element not found');
+                return;
+            }
+
+            if (!questions || questions.length === 0) {
+                console.error('No questions provided');
+                return;
+            }
+
+            let currentScore = 0;
+            let questionsAnswered = 0;
+
+            let html = `
+                <h2 class="subtitle">${title} Quiz</h2>
+                <div class="quiz-progress">Question 1 of ${questions.length}</div>
+                <div class="quiz-score">Score: 0/${questions.length}</div>
+            `;
+
+            questions.forEach((q, index) => {
+                html += `
+                    <div class="question" id="question-${index}">
+                        <div class="question-text"><strong>Question ${index + 1}:</strong> ${q.question}</div>
+                        <div class="choices">
+                `;
+
+                q.choices.forEach((choice, choiceIndex) => {
+                    html += `
+                        <button class="choice-button" onclick="selectAnswer(${index}, ${choiceIndex}, ${q.correct})">
+                            ${choice}
+                        </button>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            quizContent.innerHTML = html;
+        }
+
+        function selectAnswer(questionIndex, selectedChoice, correctChoice) {
+            const questionDiv = document.getElementById(`question-${questionIndex}`);
+
+            // Add error checking
+            if (!questionDiv) {
+                console.error(`Question div not found for index: ${questionIndex}`);
+                return;
+            }
+
+            const buttons = questionDiv.querySelectorAll('.choice-button');
+
+            if (buttons.length === 0) {
+                console.error('No choice buttons found');
+                return;
+            }
+
+            // Disable all buttons for this question
+            buttons.forEach(button => button.disabled = true);
+
+            // Mark the selected answer
+            if (buttons[selectedChoice]) {
+                buttons[selectedChoice].classList.add(selectedChoice === correctChoice ? 'correct' : 'incorrect');
+            }
+
+            // Always show the correct answer in green
+            if (selectedChoice !== correctChoice && buttons[correctChoice]) {
+                buttons[correctChoice].classList.add('correct');
+            }
+
+            // Update score
+            updateQuizScore();
+        }
+
+        function updateQuizScore() {
+            const correctAnswers = document.querySelectorAll('.choice-button.correct').length;
+            const totalQuestions = meslPart1Questions.length;
+            const scoreElement = document.querySelector('.quiz-score');
+
+            // Add error checking to prevent reference error
+            if (scoreElement) {
+                scoreElement.textContent = `Score: ${correctAnswers}/${totalQuestions}`;
+            } else {
+                console.error('Score element not found');
+            }
+        }
+
+        // Add interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.quiz-button');
+
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
